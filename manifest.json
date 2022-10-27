@@ -1,0 +1,37 @@
+{
+
+    "manifest_version": 2,
+    "name": "Netology_template_kepper",
+    "version": "1.0",
+  
+    "description": "There is saving and adding author content into textbox.",
+    "icons": {
+      "48": "build/cloud_48.png",
+      "96": "build/cloud_96.png"
+    },
+    "permissions": [
+        "activeTab"
+      ],
+      "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';",
+    "browser_action": {
+        "default_icon": "build/cloud_32.png",
+        "default_title": "Netology template kepper",
+        "default_popup": "build/index.html"
+      },
+    "applications": {
+      "gecko": {
+        "id": "netology_template_keeper@mozilla.org",
+        "strict_min_version": "45.0"
+      }
+    },
+    "content_scripts": [
+      {
+        "run_at": "document_start",
+        "matches": ["*://netology.ru/*"],
+        "js": ["build/page.build.js"]
+      }
+    ],
+    "background": {
+      "scripts": ["build/background.build.js"]
+    }
+  }

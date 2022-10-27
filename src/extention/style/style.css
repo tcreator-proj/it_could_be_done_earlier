@@ -1,0 +1,174 @@
+
+html {
+    position: relative;
+    /* width: 500px; */
+    height: 600px;
+}
+
+body {
+    width: 600px;
+    height: 800px;
+}
+
+main {
+    /* max-height: 400px; */
+    width: 100%;
+    display: flex;
+    overflow: hidden;
+    /* overflow-y: scroll; */
+    flex-direction: column;
+    padding-bottom: 30px;
+}
+
+.token_container {
+    margin-top: 40px;
+    padding-bottom: 40px;
+}
+
+.filter_wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input_block {
+    position: fixed;
+    z-index: 9;
+    background-color: white;
+}
+
+.unselectable {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -khtml-user-select: none;    /* Konqueror */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;           /* Non-prefixed version, currently */
+  }
+
+.menu_list_wrapper {
+    display: none;
+    position: absolute;
+    /* top: 10px; */
+    right: 25px;
+    z-index: 10;
+    background-color: white;
+    padding: 5px;
+    border: 1px solid black;
+    border-bottom-left-radius: 5px;
+    width: min-content;
+    height: min-content;
+}
+
+.token:not(:last-child()) {
+    border-bottom: 1px solid black;
+}
+
+.preshow_menu_list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-left: 0;
+    margin: 0;
+}
+
+.preshow_menu_list li{
+    width: 100%;
+    list-style-type: none;
+}
+
+.preshow_menu_list li:hover{
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+.preshow {
+    position: relative;
+    padding: 5px 15px;
+}
+
+.token:hover {
+    box-shadow: 0px 0px 5px lightgray;
+}
+
+.token {
+    display: none;
+}
+
+.preshow_textarea {
+    width: 100%;
+    max-height: 40px;
+    overflow: hidden;
+}
+
+#Flat {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right: 0;
+}
+#Flat:hover {
+    cursor: pointer;
+}
+
+#Flat:active {
+    scale: 90%;
+}
+
+.rotate {
+    rotate: 90deg;
+}
+
+.token_key {
+    margin-right: 10px;
+    color: brown;
+}
+
+.token_value {
+    font-style: italic;
+}
+
+
+.btn-add-token {
+    cursor: pointer;
+}
+
+#text_edit {
+    display: none;
+}
+
+.form_to_editor {
+    display: none;
+    padding: 5px;
+    width: 400px;
+    position: absolute;
+    top: 10%;
+    left: calc(50% - 200px);
+}
+
+.input_text_type {
+    width: 392.8px;
+    margin-bottom: 5px;
+}
+
+.token_list_plug {
+    width: 100%;
+    height: 70px;
+    border-top: 1px solid grey;
+    border-bottom: 1px solid grey;
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+}
+.plug {
+    text-align: center;
+}
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: block;
+}
