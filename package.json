@@ -1,5 +1,5 @@
 {
-  "name": "netology_tamplate_keeper",
+  "name": "it_could_be_done_earlier",
   "version": "1.0.0",
   "description": "There is saving and adding author content into textbox.",
   "main": "index.js",
@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+ssh://git@github.com/tcreator-proj/netology_tamplate_keeper.git"
   },
-  "author": "Hiro Protagonist <hiro@showcrash.io> (http://hiro.snowcrash.io)",
+  "author": "",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/tcreator-proj/netology_tamplate_keeper/issues"

@@ -26,8 +26,8 @@
     },
     "content_scripts": [
       {
-        "run_at": "document_start",
-        "matches": ["*://netology.ru/*"],
+        "run_at": "document_end",
+        "matches": ["*://netology.ru/*", "*://netology.ru/trainer/*"],
         "js": ["build/page.build.js"]
       }
     ],
