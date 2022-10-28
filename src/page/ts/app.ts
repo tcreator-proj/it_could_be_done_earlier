@@ -4,6 +4,7 @@ var target: HTMLElement = document.querySelector('body');
 console.log("Entered", target)
 
 let into: boolean = true;
+let windowOpened: WindowProxy[] = [];
 
 if (target) {
     // Конфигурация observer (за какими изменениями наблюдать)
@@ -35,12 +36,59 @@ if (target) {
         }
 
         if (url.includes("trainer/task/")) {
-            console.log("Редактор", into)
+            console.log("Редактор", mutationsList, observer)
+
+
+            
             const anchors: HTMLElement = document.querySelector(".src-features-trainer-trainerTask-components-Task-components-LastMessages--solutions--mQXwI")
-            let windowOpened: WindowProxy[] = [];
+            
 
             if (anchors && into) {
+                const body: HTMLElement = document.body;
+
                 into = false;
+                function keyPressDown(evt: KeyboardEvent) {
+                    if (!windowOpened.length) {
+                        const children: HTMLCollection = anchors.children;
+                        for (let child of children) {
+                            const link: HTMLElement = child.querySelector('a');
+                            const proxy: WindowProxy = window.open(link.getAttribute('href'), link.getAttribute('target'));
+                            windowOpened.push(proxy);
+                        }
+                    } else {
+                        windowOpened.forEach( (el: WindowProxy) => el.closed || el.close());
+                        windowOpened = [];
+                    }
+                }
+
+                function openAll(evt: Event) {
+                    const target: HTMLElement = <HTMLElement> evt.target;
+
+                    if (!windowOpened.length) {
+                        const children: HTMLCollection = anchors.children;
+                        
+                        target.textContent = "Close All"
+
+                        for (let child of children) {
+                            const link: HTMLElement = child.querySelector('a');
+                            const proxy: WindowProxy = window.open(link.getAttribute('href'), link.getAttribute('target'));
+                            windowOpened.push(proxy);
+                        }
+                    } else {
+                        windowOpened.forEach( (el: WindowProxy) => el.closed || el.close());
+                        windowOpened = [];
+                        target.textContent = "Open All"
+                    }
+                }
+
+                body.addEventListener('keydown', (evt: KeyboardEvent) => {     
+                    if(evt.ctrlKey && evt.keyCode === 191) {
+                        console.log("!")
+                        keyPressDown(evt);
+                    }
+                })
+                body.addEventListener("keyup", () => false);
+
                 console.log("Встроено 1")
                 function makeButton(): Node {
                     const buttonContainer: HTMLElement = document.createElement("div");
@@ -48,6 +96,7 @@ if (target) {
                     buttonContainer.style.display = "flex";
                     buttonContainer.style.justifyContent = "center";
                     buttonContainer.style.alignItems = "center";
+                    buttonContainer.style.cursor = "pointer";
                     
                     buttonContainer.style.top = "50%";
                     buttonContainer.style.right = "150px";
@@ -65,32 +114,13 @@ if (target) {
 
                     buttonContainer.appendChild(span)
 
-                    buttonContainer.addEventListener('click', function (evt: Event) {
-                        const target: HTMLElement = <HTMLElement> evt.target;
-
-                        if (!windowOpened.length) {
-                            const children: HTMLCollection = anchors.children;
-                            
-                            target.textContent = "Close All"
-
-                            for (let child of children) {
-                                const link: HTMLElement = child.querySelector('a');
-                                const proxy: WindowProxy = window.open(link.getAttribute('href'), link.getAttribute('target'));
-                                windowOpened.push(proxy);
-                            }
-                        } else {
-                            windowOpened.forEach( (el: WindowProxy) => el.closed || el.close());
-                            windowOpened = [];
-                            target.textContent = "Open All"
-                        }
-                    })
+                    buttonContainer.addEventListener('click', openAll);
                     console.log("Встроено")
                     return buttonContainer;
                 }
                 anchors.appendChild(makeButton());
             }
         }
-
     };
 
     // Создаём экземпляр наблюдателя с указанной функцией колбэка

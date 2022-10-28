@@ -1,10 +1,10 @@
 {
 
     "manifest_version": 2,
-    "name": "Netology_template_kepper",
+    "name": "It could be done earlier",
     "version": "1.0",
   
-    "description": "There is saving and adding author content into textbox.",
+    "description": "Append new capabilities into an expert's account.",
     "icons": {
       "48": "build/cloud_48.png",
       "96": "build/cloud_96.png"
@@ -15,12 +15,12 @@
       "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';",
     "browser_action": {
         "default_icon": "build/cloud_32.png",
-        "default_title": "Netology template kepper",
+        "default_title": "It could be done earlier",
         "default_popup": "build/index.html"
       },
     "applications": {
       "gecko": {
-        "id": "netology_template_keeper@mozilla.org",
+        "id": "itcouldbedoneearlier@mozilla.org",
         "strict_min_version": "45.0"
       }
     },
