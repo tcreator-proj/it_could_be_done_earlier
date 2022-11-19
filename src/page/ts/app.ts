@@ -1,7 +1,35 @@
-// Выбираем целевой элемент
-const target: HTMLElement = document.body;
+import AppContext from "./AppContext";
+import CalendarModel from "./models/CalendarModel";
+import CurrentDimplomaModel from "./models/CurrentDiplomaModel";
+import CurrentTaskModel from "./models/CurrentTaskModel";
+import ScheduleModel from "./models/ScheduleModel";
+import UncheckedTasksModel from "./models/UncheckedTasksModel";
+import UncheckedDimplomaModel from "./models/UnchekedDimplomaModel";
+import UserTasksModel from "./models/UserTasksModel";
+import ObserverInit from "./mutationObserver/ObserverInit";
 
-console.log("Entered", target)
+try {
+    const target: HTMLElement = document.body;
+    AppContext.init([
+        new CalendarModel,
+        new CurrentDimplomaModel,
+        new CurrentTaskModel,
+        new ScheduleModel,
+        new UncheckedDimplomaModel,
+        new UncheckedTasksModel,
+        new UserTasksModel
+    ])
+    AppContext.changeObserver(new ObserverInit(target, () => {
+        const loc: Location = document.location;
+        const url: string = loc.href;
+        console.log(url)
+        AppContext.changeState(url);
+    }))
+} catch (e) {
+    console.error(e)
+}
+// Выбираем целевой элемент
+
 
 // шлюзы установки слушателей
 let into: boolean = true;
@@ -11,13 +39,13 @@ let textAreaGate: boolean = true;
 
 let windowOpened: WindowProxy[] = [];
 
-if (target) {
+// if (target) {
     // Конфигурация observer (за какими изменениями наблюдать)
-    const config = {
-        attributes: true,
-        // childList: true,
-        subtree: true
-    };
+    // const config = {
+    //     attributes: true,
+    //     // childList: true,
+    //     subtree: true
+    // };
 
     // Колбэк-функция при срабатывании мутации
     // const callback: MutationCallback = function (mutationsList: MutationRecord[], observer: MutationObserver) {
@@ -185,15 +213,15 @@ if (target) {
     //     }
     // };
 
-    const callback: MutationCallback = (mutationsList: MutationRecord[], observer: MutationObserver) => {
-        context
+    // const callback: MutationCallback = (mutationsList: MutationRecord[], observer: MutationObserver) => {
+    //     context
 
-    }
+    // }
 
-    // Создаём экземпляр наблюдателя с указанной функцией колбэка
-    const observer = new MutationObserver(callback);
+    // // Создаём экземпляр наблюдателя с указанной функцией колбэка
+    // const observer = new MutationObserver(callback);
 
-    // Начинаем наблюдение за настроенными изменениями целевого элемента
-    observer.observe(target, config);
-}
+    // // Начинаем наблюдение за настроенными изменениями целевого элемента
+    // observer.observe(target, config);
+// }
 
