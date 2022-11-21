@@ -26,7 +26,6 @@ export default abstract class AppContext {
 
   public static changeState(condition: string): void {
     AppContext._pages[0].checkMe(condition);
-    AppContext._state && AppContext._state.init()
   }
 
   public static changeObserver(observerInit: ObserverInit): void {

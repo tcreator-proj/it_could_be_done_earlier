@@ -11,16 +11,4 @@ export default abstract class PageModel {
   checkMe(condition: string): void {
     throw new Error('You need to describe this method')
   }
-
-  public init() {
-    throw new Error('You need to describe this method')
-  }
-
-  public enter() {
-    this.entered = true;
-  }
-
-  public lived() {
-    this.entered = false;
-  }
 }

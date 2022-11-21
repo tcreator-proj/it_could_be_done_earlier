@@ -1,18 +1,34 @@
 import AppContext from "../AppContext";
 import PageModel from "./PageModel";
+import Visitor from './Visitor';
 
-export default class UncheckedDimplomaModel extends PageModel {
+export default class UncheckedDimplomaModel extends PageModel implements Visitor {
+  
+  constructor() {
+    super();
+    this.name = new.target.name;
+  }
+
+  enter(): void {
+    this.entered = true;
+    AppContext.setState(this);
+  }
+
+  leave(): void {
+    this.entered = false;
+  }
+
   checkMe(condition: string): void {
-    if (!this.entered) {
-      if (condition.includes("trainer/diplomas?q") && condition.includes("status_eq%5D=0")) {
-        AppContext.setState(this);
+    if (condition.includes("trainer/diplomas?q") && condition.includes("status_eq%5D=0")) {
+      if (!this.entered) {
         this.enter();
         return;
       }
-    }
-    if (this.nextModel) {
-      this.lived();
-      this.nextModel.checkMe(condition)
+    } else {
+      if (this.nextModel) {
+        this.leave();
+        this.nextModel.checkMe(condition)
+      }
     }
   }
 }

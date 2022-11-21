@@ -1,56 +1,47 @@
 import AppContext from "../AppContext"
 import PageModel from "./PageModel"
+import Visitor from './Visitor';
 
-export default class UncheckedTasksModel extends PageModel {
+export default class UncheckedTasksModel extends PageModel implements Visitor {
+
+  constructor() {
+    super();
+    this.name = new.target.name;
+  }
+
+  enter(): void {
+    this.entered = true;
+    AppContext.setState(this);
+  }
+
+  leave(): void {
+    this.entered = false;
+  }
+
   checkMe(condition: string): void {
-    if (!this.entered) {
-      if (condition.includes("trainer/tasks") && condition.includes("status_eq")) {
-        AppContext.setState(this)
+    if (condition.includes("trainer/tasks") && condition.includes("status_eq")) {
+      if (!this.entered) {
         this.enter();
         return;
       }
-    }
-    if (this.nextModel) {
-      this.lived();
-      this.nextModel.checkMe(condition);
-    }
-  }
-
-  public init(): void {
-    const taskList: HTMLElement = document.querySelector(".src-features-trainer-trainerTasks-components-Tasks--scroll--mh1ag");
-    if(taskList) {
-      this.renderLikeBlock();
+    } else {
+      if (this.nextModel) {
+        this.leave();
+        this.nextModel.checkMe(condition);
+      }
     }
   }
 
+
+  // For refactoring
   public renderLikeBlock() {
     const taskList = document.querySelectorAll(".src-features-trainer-trainerTasks-components-Tasks-components-Task--root--JucPV");
     const taskListContainer: HTMLElement = document.querySelector(".src-features-trainer-trainerTasks-components-Tasks--scroll--mh1ag");
     const taskListBar = taskListContainer.querySelector(".src-features-trainer-trainerTasks-components-Tasks--columnNames--N4MMd")
-    let currentList = "list";
-
 
     taskListContainer.style.display = "flex";
     taskListContainer.style.flexWrap = "wrap";
     taskListContainer.style.justifyContent = "space-between";
-
-    document.body.insertAdjacentHTML('afterbegin', makeToggleButton());
-
-    function makeToggleButton() {
-      return `<div class="toggle-list-button-container" style="position: absolute; top: 70px; right: 30px; width: 40px; height: 40px; border-radius: 50%; border: 1px solid grey;
-  box-shadow: 0px 0px 10px 3px rgba(189,183,189,1); cursor: pointer; z-index: 100;">
-  <div class="block icon-container">
-    <svg style="padding: 3px; width: 35px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
-    </svg>
-  </div>
-  <div class="list icon-container" hidden>
-    <svg style="padding: 3px; width: 35px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0112 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125M3.375 8.25c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m17.25-3.75h-7.5c-.621 0-1.125.504-1.125 1.125m8.625-1.125c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M12 10.875v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125M13.125 12h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125M20.625 12c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5M12 14.625v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 14.625c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m0 1.5v-1.5m0 0c0-.621.504-1.125 1.125-1.125m0 0h7.5" />
-    </svg>
-  </div>
-</div>`
-    }
 
     class StatusBar {
       buttonBlock: any;
@@ -272,23 +263,14 @@ export default class UncheckedTasksModel extends PageModel {
 
     function changeList() {
 
-      if (currentList === "list") {
-        taskList.forEach(el => el.remove());
-        taskListBar.remove();
 
-        prapareNewList(taskList).forEach((el: any) => {
-          el.transform();
-          taskListContainer.append(el.taskNode)
-        })
+      prapareNewList(taskList).forEach((el: any) => {
+        el.transform();
+        taskListContainer.append(el.taskNode)
+      })
 
-        clipStatusBarToggle();
-        currentList = "block";
-      } else {
-        taskList.forEach(el => el.remove());
-
-        taskListContainer.append(taskListBar);
-        taskList.forEach(el => taskListContainer.append(el))
-      }
+      taskList.forEach(el => el.remove());
+      taskListBar.remove();
     }
 
     function makeRejectData(status: any) {
@@ -346,58 +328,6 @@ export default class UncheckedTasksModel extends PageModel {
       }
 
     }
-
-    function clipStatusBarToggle() {
-      const container = document.querySelectorAll(".icon-block");
-
-      if (container.length > 0) {
-        function getThatDescription(evt: { target: any; }) {
-          const target = evt.target;
-          const parent = target.closest(".status-block-container");
-          return parent.querySelector(".description");
-        }
-
-        function removeHidden(evt: any) {
-          const description = getThatDescription(evt)
-          description.removeAttribute("hidden");
-        }
-
-        function appendHidden(evt: any) {
-          const description = getThatDescription(evt)
-          description.setAttribute("hidden", "");
-        }
-
-        container.forEach((el) => {
-          el.addEventListener("mouseover", removeHidden);
-        });
-
-        container.forEach((el) => {
-          el.addEventListener("mouseout", appendHidden);
-        });
-      }
-    }
-
-
-    // переключение кнопки
-    const containerToggleButton = document.querySelector(
-      ".toggle-list-button-container"
-    );
-
-    containerToggleButton.addEventListener("click", function (evt) {
-      const block = containerToggleButton.firstElementChild;
-      const list = containerToggleButton.lastElementChild;
-
-      if (block.hasAttribute("hidden")) {
-        list.setAttribute("hidden", "");
-        block.removeAttribute("hidden");
-      } else {
-        block.setAttribute("hidden", "");
-        list.removeAttribute("hidden");
-      }
-
-      changeList();
-    });
-
-
+    changeList();
   }
 }
