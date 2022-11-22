@@ -27,8 +27,11 @@ export default class EventManager extends ListenerMap {
   }
 
   public clearState(stateName: string): void {
-    const stateListenerList: string[] = this.stateListeners.get(stateName);
-    stateListenerList.forEach((id: string) => this.remove(id));
-    this.stateListeners.delete(stateName);
+    if(this.stateListeners.has(stateName)) {
+      const stateListenerList: string[] = this.stateListeners.get(stateName);
+      stateListenerList.forEach((id: string) => this.remove(id));
+      this.stateListeners.delete(stateName);
+    }
+
   }
 }

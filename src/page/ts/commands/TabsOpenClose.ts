@@ -9,6 +9,7 @@ export default class TabsOpenClose implements Executive {
   }
 
   public execute(): void {
+
     if (TabList.isEmpty()) {
       this.open();
     } else {
