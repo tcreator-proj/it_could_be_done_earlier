@@ -7,9 +7,13 @@ export default class ObserverInit {
     subtree: true
   };
 
-  constructor(node: Node, callback: MutationCallback) {
+  private constructor(node: Node, callback: MutationCallback) {
     this.currentObserver = new MutationObserver(callback);
     this.observingNode = node;
+  }
+
+  public static create(node: Node, callback: MutationCallback): ObserverInit {
+    return new ObserverInit(node, callback);
   }
 
   public get observer(): MutationObserver {

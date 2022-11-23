@@ -1,7 +1,8 @@
+import { ClassNames } from "../../enums/ClassNames"
 
-import { ClassNames } from "../enums/ClassNames"
+export default function RestyledAllTaskItems(mutations: MutationRecord[]) {
+ 
 
-export default function RestyledAllTaskItems() {
   const items: NodeListOf<HTMLElement> = document.querySelectorAll(ClassNames.itemTask);
   // if (!items.length) {
   //   items.forEach((item: HTMLElement) => {

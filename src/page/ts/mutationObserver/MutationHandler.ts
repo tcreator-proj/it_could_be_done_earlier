@@ -1,7 +1,6 @@
-import Executive from '../commands/Executive';
 import { nanoid } from 'nanoid';
 
-export default class Handler implements Executive{
+export default class MutationHandler {
   protected _id: string;
   protected _handler: Function;
   protected _name: string;
@@ -12,16 +11,16 @@ export default class Handler implements Executive{
     this._handler = handler;
   }
 
-  public static create(handler: Function, name: string): Handler {
-    return new Handler(handler, name);
+  public static create(handler: Function, name: string): MutationHandler {
+    return new MutationHandler(handler, name);
   }
 
   get id(): string {
     return this.id;
   }
 
-  execute(): void {
-    this._handler();
+  run(mutations: MutationRecord[]): void {
+    this._handler(mutations);
   }
 
   public equals(name: string): boolean {

@@ -6,7 +6,7 @@ import ScheduleModel from "./models/ScheduleModel";
 import UncheckedTasksModel from "./models/UncheckedTasksModel";
 import UncheckedDimplomaModel from "./models/UnchekedDimplomaModel";
 import UserTasksModel from "./models/UserTasksModel";
-import Handler from "./mutationObserver/Handler";
+import Handler from "./mutationObserver/MutationHandler";
 import ObserverInit from "./mutationObserver/ObserverInit";
 import ObservingHandlerList from "./mutationObserver/ObservingHandlerList";
 
@@ -21,20 +21,23 @@ try {
         new UncheckedTasksModel,
         new UserTasksModel
     ]);
-    ObservingHandlerList.instance.append(Handler.create(() => {
+
+    const changeStateMutationCallback: Handler = Handler.create(() => {
         const loc: Location = document.location;
         const url: string = loc.href;
         try {
             AppContext.changeState(url);
-        } catch(e) {
-            console.log(e)
+        } catch (e) {
+            console.log(e);
         }
-    }, "App"));
+    }, "App")
 
-    AppContext.changeObserver(new ObserverInit(target, () => {
-        ObservingHandlerList.instance.runEverything();
-    }));
+    ObservingHandlerList.append(changeStateMutationCallback);
+
+    AppContext.changeObserver(
+        ObserverInit.create(target, (mutations: MutationRecord[]) => ObservingHandlerList.runEverything(mutations))
+    );
 
 } catch (e) {
-    console.error(e)
+    console.error(e);
 }

@@ -53,7 +53,7 @@ export default class CurrentTaskModel extends PageModel implements Visitor, Obse
   }
 
   public clearObservers() {
-    ObservingHandlerList.instance.removeHandlerByName(this.name);
+    ObservingHandlerList.removeHandlerByName(this.name);
   }
 
   private createListener() {

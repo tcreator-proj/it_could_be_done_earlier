@@ -1,25 +1,28 @@
-import { ClassNames } from "../enums/ClassNames"
-import { throttle } from '../debouncer';
-import Flags from '../enums/Flags';
+import { ClassNames } from "../../enums/ClassNames"
 
-Flags.instance.setValue("rebuildFlag", true);
-
-export default function RebuildAsBlockTask() {
-
-
-  const itemMainBlock: HTMLElement = document.querySelector(ClassNames.mainBlock);
-  if (itemMainBlock && Flags.instance.getValue("rebuildFlag")) {
-    
-    throttle(() => {
-      mainBlockStyle(itemMainBlock)
-    }, 2000)();
+export default function RebuildAsBlockTask(mutations: MutationRecord[]) {
+  try {
+    for (let mutation of mutations) {
+      if (mutation.attributeName === "class") {
+        const target: HTMLElement = <HTMLElement>mutation.target;
+        if (target.className === ClassNames.blockUncheckedList) {
+          if (!target.getAttribute('styled')) {
+            mainBlockStyle(target)
+          }
+        }
+      }
+    }
+  } catch (e) {
+    console.info(e)
   }
 }
 
+
 function mainBlockStyle(block: HTMLElement) {
+  const closestParent: HTMLElement = block.closest(ClassNames.mainBlock);
   block.setAttribute("styled", "");
-  block.style.maxWidth = "100%";
-  block.style.padding = "0 20px";
+  closestParent.style.maxWidth = "100%";
+  closestParent.style.padding = "0 20px";
 }
 
 // function itemsStyle(items: HTMLElement[]) {

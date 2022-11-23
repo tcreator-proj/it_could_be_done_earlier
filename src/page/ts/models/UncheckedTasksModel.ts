@@ -3,8 +3,8 @@ import ObservingHandlerList from "../mutationObserver/ObservingHandlerList";
 import PageModel from "./PageModel"
 import Visitor from './Visitor';
 import Observable from './Observable';
-import Handler from "../mutationObserver/Handler";
-import RebuildAsBlockTask from "../mutationsHandler/RebuildAsBlockTask";
+import Handler from "../mutationObserver/MutationHandler";
+import RebuildAsBlockTask from "../mutationObserver/mutationsHandler/RebuildAsBlockTask";
 
 export default class UncheckedTasksModel extends PageModel implements Visitor, Observable {
 
@@ -16,23 +16,23 @@ export default class UncheckedTasksModel extends PageModel implements Visitor, O
   enter(): void {
     this.entered = true;
     AppContext.setState(this);
-    // this.createObservers();
+    this.createObservers();
   }
 
   leave(): void {
-    // this.clearObservers();
+    this.clearObservers();
     this.entered = false;
   }
 
   
   public createObservers() {
-    ObservingHandlerList.instance.append(
+    ObservingHandlerList.append(
       Handler.create(RebuildAsBlockTask, this.name)
     );
   }
 
   public clearObservers() {
-    ObservingHandlerList.instance.removeHandlerByName(this.name);
+    ObservingHandlerList.removeHandlerByName(this.name);
   }
 
   checkMe(condition: string): void {
