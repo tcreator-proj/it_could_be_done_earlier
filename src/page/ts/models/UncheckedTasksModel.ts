@@ -5,22 +5,48 @@ import Visitor from './Visitor';
 import Observable from './Observable';
 import Handler from "../mutationObserver/MutationHandler";
 import RebuildAsBlockTask from "../mutationObserver/mutationsHandler/RebuildAsBlockTask";
+import Listenable from './Listenable';
+import EventManager from "../listener/EventManager";
+import Listener from "../listener/Listener";
 
-export default class UncheckedTasksModel extends PageModel implements Visitor, Observable {
+export default class UncheckedTasksModel extends PageModel implements Visitor, Observable, Listenable {
 
   constructor() {
     super();
     this.name = new.target.name;
   }
 
+  createListener(): void {
+    EventManager.create(this.name, new Listener("keydown", (evt: KeyboardEvent) => {
+      if(evt.code === "Enter") {
+        evt.preventDefault();
+        const focusedBlock: HTMLElement = <HTMLElement>document.activeElement;
+        console.log(focusedBlock, focusedBlock.getAttribute("item-styled"))
+        if(focusedBlock.hasAttribute("item-styled")) {
+          const statusTaskOnFocusedBlock: HTMLElement = focusedBlock.querySelector('[data-testid="trainer-tasks-status"]');
+          console.log(statusTaskOnFocusedBlock)
+          if(statusTaskOnFocusedBlock) {
+            const statusLinkToPesonalWorkPage: HTMLElement = <HTMLElement>statusTaskOnFocusedBlock.firstElementChild;
+            statusLinkToPesonalWorkPage && statusLinkToPesonalWorkPage.click();
+          }
+        }
+      }
+    }))
+  }
+  clearListener(): void {
+    EventManager.clearState(this.name);
+  }
+
   enter(): void {
     this.entered = true;
     AppContext.setState(this);
     this.createObservers();
+    this.createListener();
   }
 
   leave(): void {
     this.clearObservers();
+    this.clearListener();
     this.entered = false;
   }
 

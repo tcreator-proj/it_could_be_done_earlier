@@ -57,14 +57,14 @@ export default class CurrentTaskModel extends PageModel implements Visitor, Obse
   }
 
   private createListener() {
-    EventManager.instance.create(this.name, new Listener("keydown", (evt: KeyboardEvent) => {
+    EventManager.create(this.name, new Listener("keydown", (evt: KeyboardEvent) => {
       if (evt.ctrlKey && evt.code === "BracketRight") {
         evt.preventDefault();
         new TabsOpenClose().execute();
       }
     }))
 
-    EventManager.instance.create(this.name, new Listener("keydown", (evt: KeyboardEvent) => {
+    EventManager.create(this.name, new Listener("keydown", (evt: KeyboardEvent) => {
       if (evt.ctrlKey && evt.code === "Space") {
         new TakeAWork().execute();
         evt.preventDefault();
@@ -72,7 +72,7 @@ export default class CurrentTaskModel extends PageModel implements Visitor, Obse
     }))
 
     // Approving 
-    EventManager.instance.create(this.name, new Listener("keydown", (evt: KeyboardEvent) => {
+    EventManager.create(this.name, new Listener("keydown", (evt: KeyboardEvent) => {
       if (evt.ctrlKey && evt.code === "Enter") {
         new ApprovingWork().execute()
         evt.preventDefault();
@@ -81,7 +81,7 @@ export default class CurrentTaskModel extends PageModel implements Visitor, Obse
     }))
 
     // Declining
-    EventManager.instance.create(this.name, new Listener("keydown", (evt: KeyboardEvent) => {
+    EventManager.create(this.name, new Listener("keydown", (evt: KeyboardEvent) => {
       if (evt.altKey && evt.code === "Enter") {
         new DecliningWork().execute();
         evt.preventDefault();
@@ -90,6 +90,6 @@ export default class CurrentTaskModel extends PageModel implements Visitor, Obse
   }
 
   private removeListener() {
-    EventManager.instance.clearState(this.name);
+    EventManager.clearState(this.name);
   }
 }

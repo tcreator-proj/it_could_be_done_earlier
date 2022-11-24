@@ -9,29 +9,28 @@ export default class EventManager extends ListenerMap {
     super();
   }
 
-  static get instance(): EventManager {
+  private static get instance(): EventManager {
     if (!EventManager._instance) {
       EventManager._instance = new EventManager();
     }
     return EventManager._instance;
   }
 
-  public create(stateName: string, listener: Listener): void {
-    if (this.stateListeners.has(stateName)) {
-      this.stateListeners.get(stateName).push(listener.id);
+  public static create(stateName: string, listener: Listener): void {
+    if (EventManager.instance.stateListeners.has(stateName)) {
+      EventManager.instance.stateListeners.get(stateName).push(listener.id);
     } else {
-      this.stateListeners.set(stateName, [listener.id]);
+      EventManager.instance.stateListeners.set(stateName, [listener.id]);
     }
 
-    this.set(listener);
+    EventManager.instance.set(listener);
   }
 
-  public clearState(stateName: string): void {
-    if(this.stateListeners.has(stateName)) {
-      const stateListenerList: string[] = this.stateListeners.get(stateName);
-      stateListenerList.forEach((id: string) => this.remove(id));
-      this.stateListeners.delete(stateName);
+  public static clearState(stateName: string): void {
+    if(EventManager.instance.stateListeners.has(stateName)) {
+      const stateListenerList: string[] = EventManager.instance.stateListeners.get(stateName);
+      stateListenerList.forEach((id: string) => EventManager.instance.remove(id));
+      EventManager.instance.stateListeners.delete(stateName);
     }
-
   }
 }

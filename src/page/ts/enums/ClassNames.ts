@@ -5,5 +5,6 @@ export const enum ClassNames {
   inputBlock = ".CodeMirror-scroll",
   mainBlock = ".src-features-trainer-trainerTasks-components-Tasks--root--gwUNk",
   itemTask = ".src-features-trainer-trainerTasks-components-Tasks-components-Task--waiting_review--uQf8_",
-  blockUncheckedList = 'src-features-trainer-trainerTasks-components-Tasks--content--i3pne'
+  blockUncheckedList = 'src-features-trainer-trainerTasks-components-Tasks--content--i3pne',
+  itemOfUncheckedTaskList = ".src-features-trainer-trainerTasks-components-Tasks-components-Task--root--JucPV"
 } 
