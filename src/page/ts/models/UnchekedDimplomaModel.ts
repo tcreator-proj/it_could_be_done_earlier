@@ -2,12 +2,7 @@ import AppContext from "../AppContext";
 import PageModel from "./PageModel";
 import Visitor from './Visitor';
 
-export default class UncheckedDimplomaModel extends PageModel implements Visitor {
-  
-  constructor() {
-    super();
-    this.name = new.target.name;
-  }
+export default class UncheckedDimplomaModel extends PageModel {
 
   enter(): void {
     this.entered = true;

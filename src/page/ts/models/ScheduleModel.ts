@@ -2,20 +2,15 @@ import AppContext from "../AppContext"
 import PageModel from "./PageModel"
 import Visitor from './Visitor';
 
-export default class ScheduleModel extends PageModel implements Visitor {
+export default class ScheduleModel extends PageModel {
 
   enter(): void {
-    this.entered = true;
+    this.wasEntered();
     AppContext.setState(this);
   }
 
   leave(): void {
-    this.entered = false;
-  }
-
-  constructor() {
-    super();
-    this.name = new.target.name;
+    this.wasLiving();
   }
 
   checkMe(condition: string): void {

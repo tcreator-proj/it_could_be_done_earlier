@@ -6,19 +6,12 @@ import TabsOpenClose from '../commands/TabsOpenClose';
 import TakeAWork from '../commands/TakeAWork';
 import ApprovingWork from '../commands/ApprovingWork';
 import DecliningWork from '../commands/DecliningWork';
-import Visitor from './Visitor';
 import ObservingHandlerList from '../mutationObserver/ObservingHandlerList';
 import Observable from './Observable';
 
-export default class CurrentTaskModel extends PageModel implements Visitor, Observable {
-
-  constructor() {
-    super();
-    this.name = new.target.name;
-  }
+export default class CurrentTaskModel extends PageModel implements Observable {
 
   checkMe(condition: string): void {
-
     if (condition.includes("trainer/task/")) {
       if (!this.entered) {
         this.enter();
@@ -33,14 +26,14 @@ export default class CurrentTaskModel extends PageModel implements Visitor, Obse
   }
 
   enter(): void {
-    this.entered = true;
+    this.wasEntered();
     this.createObservers();
     this.createListener();
     AppContext.setState(this);
   }
 
   leave(): void {
-    this.entered = false;
+    this.wasLiving();
     this.clearObservers();
     this.removeListener();
     // new TabsOpenClose().execute();

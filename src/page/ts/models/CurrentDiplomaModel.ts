@@ -2,20 +2,15 @@ import AppContext from "../AppContext";
 import PageModel from "./PageModel";
 import Visitor from './Visitor';
 
-export default class CurrentDimplomaModel extends PageModel implements Visitor {
-
-  constructor() {
-    super();
-    this.name = new.target.name;
-  }
+export default class CurrentDimplomaModel extends PageModel {
 
   enter(): void {
-    this.entered = true;
+    this.wasEntered();
     AppContext.setState(this);
   }
 
   leave(): void {
-    this.entered = false;
+    this.wasLiving();
   }
 
   checkMe(condition: string): void {
