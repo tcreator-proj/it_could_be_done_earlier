@@ -1,4 +1,3 @@
-import AppContext from "../AppContext"
 import EventManager from "../listener/EventManager";
 import Listener from "../listener/Listener";
 import PageModel from "./PageModel"
@@ -10,30 +9,14 @@ import ObservingHandlerList from '../mutationObserver/ObservingHandlerList';
 import Observable from './Observable';
 
 export default class CurrentTaskModel extends PageModel implements Observable {
-
-  checkMe(condition: string): void {
-    if (condition.includes("trainer/task/")) {
-      if (!this.entered) {
-        this.enter();
-        return;
-      }
-    } else {
-      if (this.nextModel) {
-        this.leave();
-        this.nextModel.checkMe(condition)
-      }
-    }
-  }
+  protected matchers: string[] = ["trainer/task/"]
 
   enter(): void {
-    this.wasEntered();
     this.createObservers();
     this.createListener();
-    AppContext.setState(this);
   }
 
   leave(): void {
-    this.wasLiving();
     this.clearObservers();
     this.removeListener();
     // new TabsOpenClose().execute();

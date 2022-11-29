@@ -1,4 +1,3 @@
-import AppContext from "../AppContext"
 import ObservingHandlerList from "../mutationObserver/ObservingHandlerList";
 import PageModel from "./PageModel"
 import Observable from './Observable';
@@ -10,6 +9,7 @@ import Listener from "../listener/Listener";
 import { keydownByEnterOnTask } from '../listener/listeners/keydownByEnterOnTask';
 
 export default class UncheckedTasksModel extends PageModel implements Observable, Listenable {
+  protected matchers: string[] = ["trainer/tasks", "status_eq"]
   createListener(): void {
     EventManager.create(this.name, new Listener("keydown", keydownByEnterOnTask))
   }
@@ -19,8 +19,6 @@ export default class UncheckedTasksModel extends PageModel implements Observable
   }
 
   enter(): void {
-    this.wasEntered();
-    AppContext.setState(this);
     this.createObservers();
     this.createListener();
   }
@@ -28,7 +26,6 @@ export default class UncheckedTasksModel extends PageModel implements Observable
   leave(): void {
     this.clearObservers();
     this.clearListener();
-    this.wasLiving();
   }
 
   
@@ -40,19 +37,5 @@ export default class UncheckedTasksModel extends PageModel implements Observable
 
   public clearObservers() {
     ObservingHandlerList.removeHandlerByName(this.name);
-  }
-
-  checkMe(condition: string): void {
-    if (condition.includes("trainer/tasks") && condition.includes("status_eq")) {
-      if (!this.entered) {
-        this.enter();
-        return;
-      }
-    } else {
-      if (this.nextModel) {
-        this.leave();
-        this.nextModel.checkMe(condition);
-      }
-    }
   }
 }

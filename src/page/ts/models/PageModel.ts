@@ -1,6 +1,7 @@
-import { CheckCallback } from '../types/checkCallback';
+import AppContext from '../AppContext';
 import Visitor from './Visitor';
 export default abstract class PageModel implements Visitor {
+  protected matchers: string[];
   protected nextModel: PageModel | null;
   protected entered: boolean = false;
   protected name: string;
@@ -9,21 +10,30 @@ export default abstract class PageModel implements Visitor {
     this.name = new.target.name;
   }
 
-  enter(): void {
-    throw new Error('Method not implemented.');
-  }
-
-  leave(): void {
-    throw new Error('Method not implemented.');
-  }
+  abstract enter(): void;
+  abstract leave(): void;
 
   setNextModel(model: PageModel): PageModel {
     this.nextModel = model;
     return this.nextModel;
   }
 
-  checkMe(condition: CheckCallback): void {
-    throw new Error('You need to describe this method')
+  checkMe(condition: string): void {
+    const matchingResult: boolean = this.matchers.every((matchString: string) => condition.includes(matchString))
+    if (matchingResult) {
+      if (!this.entered) {
+        this.wasEntered();
+        this.enter();
+        AppContext.setState(this);
+        return;
+      }
+    } else {
+      if (this.nextModel) {
+        this.wasLiving();
+        this.leave();
+        this.nextModel.checkMe(condition)
+      }
+    }
   }
 
   wasEntered(): void {
