@@ -9,7 +9,8 @@ import Listener from "../listener/Listener";
 import { keydownByEnterOnTask } from '../listener/listeners/keydownByEnterOnTask';
 
 export default class UncheckedTasksModel extends PageModel implements Observable, Listenable {
-  protected matchers: string[] = ["trainer/tasks", "status_eq"]
+  protected matchers: string[] = ["trainer/tasks", "status_eq"];
+
   createListener(): void {
     EventManager.create(this.name, new Listener("keydown", keydownByEnterOnTask))
   }
@@ -28,7 +29,6 @@ export default class UncheckedTasksModel extends PageModel implements Observable
     this.clearListener();
   }
 
-  
   public createObservers() {
     ObservingHandlerList.append(
       Handler.create(RebuildAsBlockTask, this.name)

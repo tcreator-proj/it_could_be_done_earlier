@@ -3,17 +3,24 @@ import Executive from './Executive';
 
 export default class TabsOpenClose implements Executive {
   protected links: NodeListOf<HTMLLinkElement>;
+  protected isTrainerAccount: boolean;
 
   constructor() {
+    const loc: Location = document.location;
+    const url: string = loc.href;
+
+    this.isTrainerAccount = url.includes('/trainer/');
     this.links = document.querySelectorAll("a[rel='noreferrer']");
   }
 
   public execute(): void {
 
-    if (TabList.isEmpty()) {
-      this.open();
-    } else {
-      this.close();
+    if (this.isTrainerAccount) {
+      if (TabList.isEmpty()) {
+        this.open();
+      } else {
+        this.close();
+      }
     }
   }
 
