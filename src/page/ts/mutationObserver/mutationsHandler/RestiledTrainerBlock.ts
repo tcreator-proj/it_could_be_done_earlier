@@ -1,20 +1,33 @@
-import { ClassNames } from "../../enums/ClassNames"
+import { ClassNames } from "../../enums/ClassNames";
 
-export default function RebuildAsBlockTask(mutations: MutationRecord[]) {
+export default function RestiledTrainerBlock(mutations: MutationRecord[]) {
   try {
     for (let mutation of mutations) {
       if (mutation.attributeName === "class") {
         const target: HTMLElement = <HTMLElement>mutation.target;
         if (target.className === ClassNames.blockUncheckedList) {
-          _expandWidthMainBlock(target)
-          const childList: NodeListOf<HTMLElement> = target.querySelectorAll(ClassNames.itemOfUncheckedTaskList);
 
-          if (childList.length) {
-            for (let item of childList) {
-              _stylingList(item);
+          const taskListContainer: HTMLElement = target.querySelector('[data-testid="trainer-tasks"]');
+          const childList: HTMLCollection = taskListContainer.children;
+
+          if (taskListContainer) {
+            taskListContainer.style.cssText = `
+              display: flex;
+              flex-wrap: wrap;
+              justify-content: space-around;
+            `
+
+            if (childList.length) {
+
+              for (let item of childList) {
+                const htmlElement: HTMLElement = <HTMLElement>item
+                _stylingList(htmlElement);
+              }
+              const htmlElement: HTMLElement = <HTMLElement> childList[0];
+              htmlElement.focus();
             }
-            childList[0].focus();
           }
+
         }
       }
     }
@@ -23,35 +36,6 @@ export default function RebuildAsBlockTask(mutations: MutationRecord[]) {
   }
 }
 
-// Стилизуем основной блок со списком заданий 
-function _markByStyled(block: HTMLElement) {
-  block.setAttribute("styled", "");
-}
-
-function _expandWidthMainBlock(block: HTMLElement) {
-  const closestParent: HTMLElement = block.closest(ClassNames.mainBlock);
-  const taskListContainer: HTMLElement = block.querySelector('[data-testid="trainer-tasks"]');
-
-  if (taskListContainer) {
-    const tableHeaderDescribe: HTMLElement = <HTMLElement>taskListContainer.firstElementChild;
-
-    taskListContainer.style.cssText = `
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-    `
-    if(tableHeaderDescribe) tableHeaderDescribe.style.display = "none";
-  }
-
-  _markByStyled(block);
-
-  closestParent.style.cssText = `
-    max-width: 100%;
-    padding: 0 20px;
-  `
-}
-
-// Стилизация списка задач
 function _stylingList(item: HTMLElement) {
   const avatarBlock: HTMLElement = <HTMLElement>item.firstElementChild;
   const nameAndDateStud: HTMLElement = <HTMLElement>item.children[1];

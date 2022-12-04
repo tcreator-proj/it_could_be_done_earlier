@@ -28,9 +28,11 @@ export default abstract class PageModel implements Visitor {
         return;
       }
     } else {
-      if (this.nextModel) {
+      if (this.entered) {
         this.wasLiving();
         this.leave();
+      }
+      if (this.nextModel) {
         this.nextModel.checkMe(condition)
       }
     }
